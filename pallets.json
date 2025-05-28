@@ -1,0 +1,162 @@
+[
+  {
+    "Id": "d4b9c5a2-8a7d-4a2b-b32b-3d9b39a8d1f2",
+    "Width": 120,
+    "Height": 150,
+    "Depth": 100,
+    "Boxes": [
+      {
+        "Width": 30,
+        "Height": 40,
+        "Depth": 50,
+        "Weight": 10,
+        "ExpirationDate": "2025-12-31T00:00:00",
+        "PalletId": "d4b9c5a2-8a7d-4a2b-b32b-3d9b39a8d1f2"
+      },
+      {
+        "Width": 35,
+        "Height": 45,
+        "Depth": 55,
+        "Weight": 12,
+        "ProductionDate": "2025-01-01T00:00:00",
+        "PalletId": "d4b9c5a2-8a7d-4a2b-b32b-3d9b39a8d1f2"
+      },
+      {
+        "Width": 32,
+        "Height": 42,
+        "Depth": 52,
+        "Weight": 11,
+        "ProductionDate": "2025-02-01T00:00:00",
+        "PalletId": "d4b9c5a2-8a7d-4a2b-b32b-3d9b39a8d1f2"
+      }
+    ]
+  },
+  {
+    "Id": "f1e8e2b1-ec89-4d35-9dc0-21f97be7c789",
+    "Width": 130,
+    "Height": 160,
+    "Depth": 110,
+    "Boxes": [
+      {
+        "Width": 40,
+        "Height": 60,
+        "Depth": 70,
+        "Weight": 15,
+        "ExpirationDate": "2025-11-15T00:00:00",
+        "PalletId": "f1e8e2b1-ec89-4d35-9dc0-21f97be7c789"
+      },
+      {
+        "Width": 38,
+        "Height": 58,
+        "Depth": 68,
+        "Weight": 14,
+        "ProductionDate": "2025-03-10T00:00:00",
+        "PalletId": "f1e8e2b1-ec89-4d35-9dc0-21f97be7c789"
+      },
+      {
+        "Width": 36,
+        "Height": 56,
+        "Depth": 66,
+        "Weight": 13,
+        "ProductionDate": "2025-03-15T00:00:00",
+        "PalletId": "f1e8e2b1-ec89-4d35-9dc0-21f97be7c789"
+      }
+    ]
+  },
+  {
+    "Id": "a8b1f690-05e0-411a-8899-3b63c89bfe9e",
+    "Width": 140,
+    "Height": 170,
+    "Depth": 120,
+    "Boxes": [
+      {
+        "Width": 45,
+        "Height": 65,
+        "Depth": 75,
+        "Weight": 16,
+        "ExpirationDate": "2025-10-20T00:00:00",
+        "PalletId": "a8b1f690-05e0-411a-8899-3b63c89bfe9e"
+      },
+      {
+        "Width": 46,
+        "Height": 66,
+        "Depth": 76,
+        "Weight": 17,
+        "ProductionDate": "2025-04-05T00:00:00",
+        "PalletId": "a8b1f690-05e0-411a-8899-3b63c89bfe9e"
+      },
+      {
+        "Width": 47,
+        "Height": 67,
+        "Depth": 77,
+        "Weight": 18,
+        "ProductionDate": "2025-04-10T00:00:00",
+        "PalletId": "a8b1f690-05e0-411a-8899-3b63c89bfe9e"
+      }
+    ]
+  },
+  {
+    "Id": "b3c7ed41-4cbb-41f5-8f1a-0a81bcb8a0ab",
+    "Width": 125,
+    "Height": 155,
+    "Depth": 105,
+    "Boxes": [
+      {
+        "Width": 34,
+        "Height": 44,
+        "Depth": 54,
+        "Weight": 10,
+        "ExpirationDate": "2025-09-30T00:00:00",
+        "PalletId": "b3c7ed41-4cbb-41f5-8f1a-0a81bcb8a0ab"
+      },
+      {
+        "Width": 36,
+        "Height": 46,
+        "Depth": 56,
+        "Weight": 11,
+        "ProductionDate": "2025-05-01T00:00:00",
+        "PalletId": "b3c7ed41-4cbb-41f5-8f1a-0a81bcb8a0ab"
+      },
+      {
+        "Width": 38,
+        "Height": 48,
+        "Depth": 58,
+        "Weight": 12,
+        "ProductionDate": "2025-05-05T00:00:00",
+        "PalletId": "b3c7ed41-4cbb-41f5-8f1a-0a81bcb8a0ab"
+      }
+    ]
+  },
+  {
+    "Id": "0cdeaf3f-29d5-4f3c-89a2-3f4f89e0d99b",
+    "Width": 135,
+    "Height": 165,
+    "Depth": 115,
+    "Boxes": [
+      {
+        "Width": 42,
+        "Height": 52,
+        "Depth": 62,
+        "Weight": 13,
+        "ExpirationDate": "2025-08-20T00:00:00",
+        "PalletId": "0cdeaf3f-29d5-4f3c-89a2-3f4f89e0d99b"
+      },
+      {
+        "Width": 44,
+        "Height": 54,
+        "Depth": 64,
+        "Weight": 14,
+        "ProductionDate": "2025-06-01T00:00:00",
+        "PalletId": "0cdeaf3f-29d5-4f3c-89a2-3f4f89e0d99b"
+      },
+      {
+        "Width": 46,
+        "Height": 56,
+        "Depth": 66,
+        "Weight": 15,
+        "ProductionDate": "2025-06-05T00:00:00",
+        "PalletId": "0cdeaf3f-29d5-4f3c-89a2-3f4f89e0d99b"
+      }
+    ]
+  }
+]
