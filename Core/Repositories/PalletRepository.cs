@@ -6,6 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Core.Repositories;
 
+/// <summary>
+/// Репозиторий для управления паллетами и получения связанных данных из бд
+/// </summary>
 public class PalletRepository : IPalletRepository
 {
     private readonly ApplicationDbContext _context;
@@ -14,6 +17,12 @@ public class PalletRepository : IPalletRepository
     {
         _context = context;
     }
+    
+    /// <summary>
+    /// Возвращает 3 паллеты с коробками, у которых есть срок годности,
+    /// отсортированные по убыванию максимальной даты и затем по возрастанию объема
+    /// </summary>
+    /// <returns>Список из 3 паллет</returns>
     public async Task<List<PalletDto>> Get3PalletAsync()
     {
         try
@@ -49,6 +58,11 @@ public class PalletRepository : IPalletRepository
             throw;
         }
     }
+    
+    /// <summary>
+    /// Возвращает все паллеты с их связанными коробками
+    /// </summary>
+    /// <returns>Список</returns>
     public async Task<List<PalletDto>> GetAllAsync()
     {
         try
@@ -74,7 +88,10 @@ public class PalletRepository : IPalletRepository
             throw;
         }
     }
-
+    
+    /// <summary>
+    /// Обновляет паллету в базе данных по данным из DTO.
+    /// </summary>
     public async Task UpdateAsync(PalletDto dto)
     {
         var palletEntity = await _context.Pallets.FindAsync(dto.Id);
@@ -89,6 +106,11 @@ public class PalletRepository : IPalletRepository
         
         await _context.SaveChangesAsync();
     }
+    
+    /// <summary>
+    /// Получает паллету по её идентификатору.
+    /// </summary>
+    /// <param name="id">Идентификатор паллеты.</param>
     public async Task<PalletDto> GetByIdAsync(Guid id)
     {
         try
@@ -111,7 +133,10 @@ public class PalletRepository : IPalletRepository
             throw;
         }
     }
-
+    
+    /// <summary>
+    /// Создаёт новую паллету в базе данных.
+    /// </summary>
     public async Task CreateAsync(PalletDto dto)
     {
         await using var tr = await _context.Database.BeginTransactionAsync();

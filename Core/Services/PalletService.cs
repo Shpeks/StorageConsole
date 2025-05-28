@@ -5,6 +5,9 @@ using DAL.Entity;
 
 namespace Core.Services;
 
+/// <summary>
+/// Сервис для управления паллетами
+/// </summary>
 public class PalletService : IPalletService
 {
     private readonly IBoxRepository _boxRepository;
@@ -15,11 +18,17 @@ public class PalletService : IPalletService
         _palletRepository = palletRepository;
     }
 
+    /// <summary>
+    /// Создает новую паллету
+    /// </summary>
     public async Task CreateAsync(PalletDto dto)
     {
         await _palletRepository.CreateAsync(dto);
     }
-
+    
+    /// <summary>
+    /// Обновляет информацию о паллете, пересчитывая ее общий вес, объем и минимальный срок годности на основе связанных коробок
+    /// </summary>
     public async Task UpdateAsync(PalletDto dto)
     {
         var boxes = await _boxRepository.GetByPalletIdAsync(dto.Id);
@@ -36,6 +45,9 @@ public class PalletService : IPalletService
         await _palletRepository.UpdateAsync(dto);
     }
     
+    /// <summary>
+    /// Выводит в консоль список паллет, сгруппированных по сроку годности, отсортированных по дате и весу.
+    /// </summary>
     public async Task GetFirstMethodAsync()
     {
         var pallets = await _palletRepository.GetAllAsync();
@@ -61,6 +73,10 @@ public class PalletService : IPalletService
         }
     }
 
+    /// <summary>
+    /// Возвращает список из трёх паллет с определёнными критериями
+    /// </summary>
+    /// <returns>Список из 3 паллет</returns>
     public async Task<List<PalletDto>> GetSecondMethodAsync()
     {
         return await _palletRepository.Get3PalletAsync();
