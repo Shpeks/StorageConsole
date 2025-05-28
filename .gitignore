@@ -1,0 +1,15 @@
+## Build
+bin/
+obj/
+
+## VS
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+## Rider
+.idea/
+.idea
+*.sln.iml
