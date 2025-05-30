@@ -1,3 +1,5 @@
+using Core.Factories;
+using Core.Interfaces.Factories;
 using Core.Interfaces.Repositories;
 using Core.Interfaces.Services;
 using Core.Repositories;
@@ -29,6 +31,7 @@ public static class DependencyInjection
         
         services.AddScoped<IBoxService, BoxService>();
         services.AddScoped<IPalletService, PalletService>();
+        services.AddScoped<IBoxFactory, BoxFactory>();
 
         return services.BuildServiceProvider();
     }

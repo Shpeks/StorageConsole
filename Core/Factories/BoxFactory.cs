@@ -1,14 +1,36 @@
+using Core.Interfaces.Factories;
 using Core.Models;
 using DAL.Entity;
 
 namespace Core.Factories;
 
-public static class BoxFactory
+public class BoxFactory : IBoxFactory
 {
+    /// <summary>
+    /// Определяет, какой фабричный метод использовать для создания коробки на основе дат
+    /// </summary>
+    /// <exception cref="InvalidOperationException">
+    /// Если не указана ни одна из дат
+    /// </exception>
+    public Box CreateBox(BoxDto dto)
+    {
+        switch (dto.ProductionDate, dto.ExpirationDate)
+        {
+            case (null, not null):
+                return BoxFactory.CreateBoxWithExpirationDate(dto);
+            case (not null, null):
+                return BoxFactory.CreateBoxWithProductDate(dto);
+            case (not null,not null):
+                return BoxFactory.CreateBoxWithBothDates(dto);
+            default:
+                throw new InvalidOperationException();
+        }
+    }
+
     /// <summary>
     /// Создание коробки с передачей только даты производства (ProductDate)
     /// </summary>
-    public static BoxDto CreateBoxWithProductDate(BoxDto dto)
+    private static Box CreateBoxWithProductDate(BoxDto dto)
     {
         if (dto.ProductionDate is null)
             throw new InvalidOperationException("ProductionDate должен быть указан.");
@@ -16,7 +38,7 @@ public static class BoxFactory
         var productionDate = DateTime.SpecifyKind(dto.ProductionDate.Value, DateTimeKind.Utc);
         var expirationDate = productionDate.AddDays(100);
         
-        return new BoxDto
+        return new Box
         {
             Width = dto.Width,
             Weight = dto.Weight,
@@ -32,11 +54,11 @@ public static class BoxFactory
     /// <summary>
     /// Создание коробки с передачей только срока годности (ExpirationDate)
     /// </summary>
-    public static BoxDto CreateBoxWithExpirationDate(BoxDto dto)
+    private static Box CreateBoxWithExpirationDate(BoxDto dto)
     {
-        var expirationDate = DateTime.SpecifyKind(dto.ExpirationDate.Value, DateTimeKind.Utc);
+        var expirationDate = DateTime.SpecifyKind(dto.ExpirationDate.Value.Date, DateTimeKind.Utc);
         
-        return new BoxDto
+        return new Box
         {
             Width = dto.Width,
             Weight = dto.Weight,
@@ -52,12 +74,12 @@ public static class BoxFactory
     /// <summary>
     /// Создание коробки имея обе даты (ProductDate и ExpirationDate)
     /// </summary>
-    public static BoxDto CreateBoxWithBothDates(BoxDto dto)
+    private static Box CreateBoxWithBothDates(BoxDto dto)
     {
-        var expirationDate = DateTime.SpecifyKind(dto.ExpirationDate.Value, DateTimeKind.Utc);
-        var productionDate = DateTime.SpecifyKind(dto.ProductionDate.Value, DateTimeKind.Utc);
+        var expirationDate = DateTime.SpecifyKind(dto.ExpirationDate.Value.Date, DateTimeKind.Utc);
+        var productionDate = DateTime.SpecifyKind(dto.ProductionDate.Value.Date, DateTimeKind.Utc);
         
-        return new BoxDto
+        return new Box
         {
             Width = dto.Width,
             Weight = dto.Weight,
