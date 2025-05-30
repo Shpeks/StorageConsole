@@ -22,12 +22,12 @@ public class Box
     /// <summary>
     /// Дата производства (если указана, используется для расчёта срока годности)
     /// </summary>
-    public DateTime? ProductionDate { get; set; }
+    public DateTime? ProductionDate { get; init; }
     
     /// <summary>
     /// Срок годности
     /// </summary>
-    public DateTime? ExpirationDate { get; set; }
+    public required DateTime ExpirationDate { get; init; }
     
     /// <summary>
     /// Вес в кг

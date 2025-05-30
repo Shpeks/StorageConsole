@@ -25,7 +25,7 @@ public class Pallet
     public ICollection<Box> Boxes { get; set; }
     
     /// <summary>
-    /// Общий вес : сумма весов всех коробок + вес палеты (30 кг)
+    /// Общий вес: сумма весов всех коробок + вес палеты (30 кг)
     /// </summary>
     public double TotalWeight { get; set; }
     
@@ -37,5 +37,5 @@ public class Pallet
     /// <summary>
     /// Срок годности: минимальный срок среди всех коробок
     /// </summary>
-    public DateTime? ExpirationDate { get; set; }
+    public DateTime ExpirationDate { get; set; }
 }

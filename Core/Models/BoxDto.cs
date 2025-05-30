@@ -37,9 +37,9 @@ public class BoxDto
     public double Weight { get; set; }
     
     /// <summary>
-    /// Объем в куб. см
+    /// Объем в куб. см.
     /// </summary>
-    public double Volume { get;set; }
+    public double Volume { get; set; }
     
     public Guid PalletId { get; set; }
 }
