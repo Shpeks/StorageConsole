@@ -23,13 +23,12 @@ public class PalletRepository : IPalletRepository
     /// отсортированные по убыванию максимальной даты и затем по возрастанию объема
     /// </summary>
     /// <returns>Список из 3 паллет</returns>
-    public async Task<List<PalletDto>> Get3PalletAsync()
+    public async Task<List<PalletDto>> GetThreePalletAsync()
     {
         try
         {
             var topPallets = await _context.Pallets
                 .Include(p => p.Boxes)
-                .Where(p => p.Boxes.Any(b => b.ExpirationDate.HasValue))
                 .Select(p => new
                 {
                     Pallet = p,
@@ -52,39 +51,14 @@ public class PalletRepository : IPalletRepository
 
             return topPallets;
         }
-        catch (Exception e)
+        catch (ArgumentNullException e)
         {
-            Console.WriteLine("Ошибка: " + e.Message);
+            Console.WriteLine($"Ошибка {e.Message} \nЗапись не найдена");
             throw;
         }
-    }
-    
-    /// <summary>
-    /// Возвращает все паллеты с их связанными коробками
-    /// </summary>
-    /// <returns>Список</returns>
-    public async Task<List<PalletDto>> GetAllAsync()
-    {
-        try
-        {
-            var palletEntity = await _context.Pallets
-                .Include(b => b.Boxes)
-                .ToListAsync();
-
-            return palletEntity.Select(p => new PalletDto
-            {
-                Id = p.Id,
-                Width = p.Width,
-                Height = p.Height,
-                Depth = p.Depth,
-                TotalWeight =  p.TotalWeight,
-                TotalVolume = p.TotalVolume,
-                ExpirationDate = p.ExpirationDate,
-            }).ToList();
-        }
         catch (Exception e)
         {
-            Console.WriteLine($"Ошибка: {e}");
+            Console.WriteLine($"Ошибка: {e.Message}");
             throw;
         }
     }
@@ -94,17 +68,25 @@ public class PalletRepository : IPalletRepository
     /// </summary>
     public async Task UpdateAsync(PalletDto dto)
     {
-        var palletEntity = await _context.Pallets.FindAsync(dto.Id);
-        if (palletEntity == null) return;
-        
-        palletEntity.Width = dto.Width;
-        palletEntity.Height = dto.Height;
-        palletEntity.Depth = dto.Depth;
-        palletEntity.TotalWeight = dto.TotalWeight;
-        palletEntity.TotalVolume = dto.TotalVolume;
-        palletEntity.ExpirationDate = dto.ExpirationDate;
-        
-        await _context.SaveChangesAsync();
+        try
+        {
+            var palletEntity = await _context.Pallets.FindAsync(dto.Id);
+            if (palletEntity == null) return;
+
+            palletEntity.Width = dto.Width;
+            palletEntity.Height = dto.Height;
+            palletEntity.Depth = dto.Depth;
+            palletEntity.TotalWeight = dto.TotalWeight;
+            palletEntity.TotalVolume = dto.TotalVolume;
+            palletEntity.ExpirationDate = dto.ExpirationDate;
+
+            await _context.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Ошибка {e.Message}");
+            throw;
+        }
     }
     
     /// <summary>
@@ -119,6 +101,7 @@ public class PalletRepository : IPalletRepository
 
             return new PalletDto
             {
+                Id = palletEntity.Id,
                 Width = palletEntity.Width,
                 Height = palletEntity.Height,
                 Depth = palletEntity.Depth,
@@ -129,7 +112,7 @@ public class PalletRepository : IPalletRepository
         }
         catch (Exception e)
         {
-            Console.WriteLine($"Ошибка: {e}");
+            Console.WriteLine($"Ошибка: {e.Message}");
             throw;
         }
     }
@@ -137,14 +120,12 @@ public class PalletRepository : IPalletRepository
     /// <summary>
     /// Создаёт новую паллету в базе данных.
     /// </summary>
-    public async Task CreateAsync(PalletDto dto)
+    public async Task<Guid> CreateAsync(PalletDto dto)
     {
-        await using var tr = await _context.Database.BeginTransactionAsync();
         try
         {
             var palletEntity = new Pallet
             {
-                Id = dto.Id,
                 Width = dto.Width,
                 Height = dto.Height,
                 Depth = dto.Depth,
@@ -156,13 +137,36 @@ public class PalletRepository : IPalletRepository
             await _context.Pallets.AddAsync(palletEntity);
             await _context.SaveChangesAsync();
             
-            await tr.CommitAsync();
+            return palletEntity.Id;
         }
         catch (Exception e)
         {
-            await tr.RollbackAsync();
-            Console.WriteLine($"Ошибка {e}");
+            Console.WriteLine($"Ошибка {e.Message}");
             throw;
         }
+    }
+
+    public async Task<List<PalletGroupDto>> GetSortedPalletAsync()
+    {
+        var pallets = await _context.Pallets
+            .Include(p => p.Boxes)
+            .ToListAsync();
+
+        var grouped = pallets
+            .GroupBy(p => p.ExpirationDate.Date)
+            .OrderBy(g => g.Key)
+            .Select(g => new PalletGroupDto
+            {
+                ExpirationDate = g.Key,
+                Pallets = g.OrderBy(p => p.TotalWeight)
+                    .Select(p => new Pallets
+                    {
+                        Id = p.Id,
+                        TotalWeight = p.TotalWeight,
+                    }).ToList()
+            })
+            .ToList();
+
+        return grouped;
     }
 }

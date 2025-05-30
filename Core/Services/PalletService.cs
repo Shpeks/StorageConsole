@@ -21,64 +21,44 @@ public class PalletService : IPalletService
     /// <summary>
     /// Создает новую паллету
     /// </summary>
-    public async Task CreateAsync(PalletDto dto)
+    public async Task<Guid> CreateAsync(PalletDto dto)
     {
-        await _palletRepository.CreateAsync(dto);
+        return await _palletRepository.CreateAsync(dto);
     }
     
     /// <summary>
     /// Обновляет информацию о паллете, пересчитывая ее общий вес, объем и минимальный срок годности на основе связанных коробок
     /// </summary>
-    public async Task UpdateAsync(PalletDto dto)
+    public async Task UpdateAsync(Guid id)
     {
-        var boxes = await _boxRepository.GetByPalletIdAsync(dto.Id);
+        var box = await _boxRepository.GetListByPalletIdAsync(id);
+        var pallet = await _palletRepository.GetByIdAsync(id);
         
-        dto.TotalWeight = boxes.Sum(b => b.Weight) + 30;
+        pallet.TotalWeight = box.Sum(b => b.Weight) + 30;
         
-        dto.TotalVolume = boxes.Sum(b => b.Volume) + (dto.Width + dto.Height + dto.Depth);
+        pallet.TotalVolume = box.Sum(b => b.Volume) + (pallet.Width * pallet.Height * pallet.Depth);
         
-        dto.ExpirationDate = boxes
-            .Where(b => b.ExpirationDate.HasValue)
+        pallet.ExpirationDate = box
             .Select(b => b.ExpirationDate.Value)
             .Min();
         
-        await _palletRepository.UpdateAsync(dto);
+        await _palletRepository.UpdateAsync(pallet);
     }
     
-    /// <summary>
+    /// <summary>   
     /// Выводит в консоль список паллет, сгруппированных по сроку годности, отсортированных по дате и весу.
     /// </summary>
-    public async Task GetFirstMethodAsync()
+    public async Task<List<PalletGroupDto>> GetSortedPalletAsync()
     {
-        var pallets = await _palletRepository.GetAllAsync();
-        var groupPallets = pallets
-            .Where(p => p.ExpirationDate.HasValue)
-            .GroupBy(p => p.ExpirationDate.Value)
-            .OrderBy(g => g.Key)
-            .Select(g => new
-            {
-                ExpirationDate = g.Key,
-                Pallets = g.OrderBy(p => p.TotalWeight).ToList()
-            })
-            .ToList();
-
-        foreach (var group in groupPallets)
-        {
-            Console.WriteLine($"Срок годности:  {group.ExpirationDate.ToString("dd.MM.yyyy")}");
-
-            foreach (var pallet in group.Pallets)
-            {
-                Console.WriteLine($"Вес: {pallet.TotalWeight} кг. | Объем: {pallet.TotalVolume} куб. см.");
-            }
-        }
+        return await _palletRepository.GetSortedPalletAsync();
     }
 
     /// <summary>
     /// Возвращает список из трёх паллет с определёнными критериями
     /// </summary>
     /// <returns>Список из 3 паллет</returns>
-    public async Task<List<PalletDto>> GetSecondMethodAsync()
+    public async Task<List<PalletDto>> GetThreePalletAsync()
     {
-        return await _palletRepository.Get3PalletAsync();
+        return await _palletRepository.GetThreePalletAsync();
     }
 }
