@@ -9,9 +9,10 @@ internal class Program
 {
     public static async Task Main(string[] args)
     {
-        if (args.Any(arg => arg.Contains("ef", StringComparison.OrdinalIgnoreCase)))
+        // Что бы не запускалось консолька при использованье команд ef.tools
+        if (AppDomain.CurrentDomain.FriendlyName.Contains("ef"))
             return;
-            
+        
         var serviceProvider = DependencyInjection.ConfigureServices();
 
         var palletService = serviceProvider.GetRequiredService<IPalletService>();
@@ -29,6 +30,7 @@ internal class Program
             
             if (key2 == "1")
             {
+                // Выполнение первого условия тз по выводу
                 var pallets = await palletService.GetSortedPalletAsync();
                 var groupNumber = 1;
                 
@@ -46,6 +48,7 @@ internal class Program
             }
             else if (key2 == "2")
             {
+                // Выполнение второго условия тз по выводу
                 var pallets = await palletService.GetThreePalletAsync();
                 
                 Console.WriteLine("Топ-3 паллеты с коробками, у которых наибольший срок годности:");
