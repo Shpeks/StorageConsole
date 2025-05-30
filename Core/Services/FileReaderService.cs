@@ -19,16 +19,25 @@ public class FileReaderService
     {
         if (!File.Exists(filePath))
             throw new FileNotFoundException($"Файл {filePath} не найден.");
-
-        using var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-        using var reader = new StreamReader(stream);
-        var json = await reader.ReadToEndAsync();
-
-        var pallets = JsonSerializer.Deserialize<List<PalletDto>>(json, new JsonSerializerOptions
+        
+        try
         {
-            PropertyNameCaseInsensitive = true
-        });
+            using var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+            using var reader = new StreamReader(stream);
+            var json = await reader.ReadToEndAsync();
 
-        return pallets ?? new List<PalletDto>();
+            var pallets = JsonSerializer.Deserialize<List<PalletDto>>(json, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
+            return pallets ?? new List<PalletDto>();
+        }
+        catch (JsonException e)
+        {
+            Console.WriteLine($"Ошибка {e.Message}");
+            Console.WriteLine($"Файл: {filePath}");
+            throw new InvalidDataException("JSON-файл повреждён или содержит некорректные поля.");
+        }
     }
 }
