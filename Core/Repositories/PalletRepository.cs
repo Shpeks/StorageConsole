@@ -82,6 +82,11 @@ public class PalletRepository : IPalletRepository
 
             await _context.SaveChangesAsync();
         }
+        catch (DbUpdateException e)
+        {
+            Console.WriteLine($"Ошибка при обновлении записи бд \n{e.Message}");
+            throw;
+        }
         catch (Exception e)
         {
             Console.WriteLine($"Ошибка {e.Message}");
@@ -109,6 +114,11 @@ public class PalletRepository : IPalletRepository
                 TotalVolume = palletEntity.TotalVolume,
                 ExpirationDate = palletEntity.ExpirationDate,
             };
+        }
+        catch (ArgumentNullException e)
+        {
+            Console.WriteLine($"Ошибка: {e.Message} \nПаллета не найдена");
+            throw;
         }
         catch (Exception e)
         {
